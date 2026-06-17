@@ -8,10 +8,13 @@ type TaskType = {
 }
 
 type Props = {
-  tasks: TaskType[]
+tasks: TaskType[], 
+filter: string
+setFilter: (filter:string) => void
+clearCompleted: () => void
 }
 
-function Footer({ tasks }: Props) {
+function Footer({ tasks, filter, setFilter, clearCompleted }: Props) {
   const activeCount = tasks.filter((t) => !t.completed).length
 
   return (
@@ -20,9 +23,12 @@ function Footer({ tasks }: Props) {
         {activeCount} items left
       </span>
 
-      <TaskFilter />
+      <TaskFilter
+      filter = {filter} 
+      setFilter = {setFilter}/>
 
-      <button className="clear-completed">
+      <button className="clear-completed"
+      onClick={clearCompleted}>
         Clear completed
       </button>
     </footer>

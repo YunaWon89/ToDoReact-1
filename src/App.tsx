@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NewTaskForm from "./components/NewTaskForm";
 import TaskList from "./components/TaskList";
 import Footer from "./components/Footer";
@@ -11,30 +11,45 @@ type TaskType = {
   isEditing: boolean;
 };
 
+type TodoApi = {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
 function App() {
-  const [tasks, setTasks] = useState<TaskType[]>([
-    {
-      id: 1,
-      description: "Completed task",
-      completed: true,
-      created: new Date(),
-      isEditing: false,
-    },
-    {
-      id: 2,
-      description: "Editing task",
-      completed: false,
-      created: new Date(),
-      isEditing: false,
-    },
-    {
-      id: 3,
-      description: "Active task",
-      completed: false,
-      created: new Date(),
-      isEditing: false,
-    },
-  ]);
+const [tasks, setTasks] = useState<TaskType[]>([]);
+const [filter, setFilter] = useState("all");
+
+   useEffect(() => {
+  async function loadTasks() {
+    try {
+      const response = await fetch(
+        "https://jsonplaceholder.typicode.com/todos"
+      );
+
+      const data :TodoApi[] = await response.json();
+
+      setTasks(
+        data.map((todo) => ({
+          id: todo.id,
+          description: todo.title,
+          completed: todo.completed,
+          created: new Date(),
+          isEditing: false,
+        }))
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  loadTasks();
+}, []);
+
+
+
   function toggleTask(id: number) {
     setTasks((prev) =>
       prev.map((task) =>
@@ -63,18 +78,49 @@ function App() {
       )
     )
   }
+
+function addTask(text: string) {
+  const newTask = {
+    id: Date.now(),
+    description: text,
+    completed: false,
+    created: new Date(),
+    isEditing: false
+  }
+
+  setTasks(prev => [...prev, newTask])
+}
+const filteredTasks =
+  filter === "all"
+    ? tasks
+    : filter ==="active"
+    ? tasks.filter((task) => !task.completed)
+    : tasks.filter((task) => task.completed)
+   
+    
+function clearCompleted() {
+  setTasks(prev => prev.filter(task => !task.completed))
+}
+
+
   return (
     <section className="todoapp">
-      <NewTaskForm />
-      <TaskList tasks={tasks} 
+      <NewTaskForm addTask = {addTask}/>
+      <TaskList tasks={filteredTasks} 
       toggleTask={toggleTask} 
       deleteTask={deleteTask} 
       toggleEditTask={toggleEditTask}
       updateTask ={updateTask}
       />
-      <Footer tasks={tasks} />
+      <Footer tasks={tasks}
+      filter = {filter}
+      setFilter= {setFilter}
+      clearCompleted = {clearCompleted} />
+      
     </section>
   );
 }
+
+
 
 export default App;
