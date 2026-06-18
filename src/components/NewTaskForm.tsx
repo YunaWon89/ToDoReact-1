@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PropTypes from "prop-types"
 
 type Props = {
   addTask: (text: string) => void;
@@ -25,5 +26,9 @@ function NewTaskForm({ addTask }: Props) {
     </header>
   );
 }
+
+NewTaskForm.propTypes = {
+  addTask: PropTypes.func.isRequired,
+};
 
 export default NewTaskForm;

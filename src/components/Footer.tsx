@@ -1,4 +1,5 @@
 import TaskFilter from "./TasksFilter"
+import PropTypes from "prop-types"
 
 type TaskType = {
   id: number
@@ -34,5 +35,12 @@ function Footer({ tasks, filter, setFilter, clearCompleted }: Props) {
     </footer>
   )
 }
+
+Footer.propTypes = {
+  tasks: PropTypes.array.isRequired,
+  filter: PropTypes.string.isRequired,
+  setFilter: PropTypes.func.isRequired,
+  clearCompleted: PropTypes.func.isRequired,
+};
 
 export default Footer

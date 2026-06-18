@@ -1,4 +1,5 @@
 import Task from "./Task"
+import PropTypes from "prop-types"
 
 type TaskType = {
   id: number
@@ -32,6 +33,25 @@ function TaskList({ tasks, toggleTask, deleteTask, toggleEditTask, updateTask }:
     </ul>
   )
 }
+
+
+
+TaskList.propTypes = {
+  tasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      description: PropTypes.string.isRequired,
+      completed: PropTypes.bool.isRequired,
+      created: PropTypes.instanceOf(Date).isRequired,
+      isEditing: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+
+  toggleTask: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
+  toggleEditTask: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
+}; 
 
 export default TaskList
 

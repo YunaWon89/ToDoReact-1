@@ -1,3 +1,6 @@
+import PropTypes from "prop-types"
+
+
 type Props = {
   filter: string
   setFilter: (filter: string) => void
@@ -14,5 +17,10 @@ function TaskFilter({ filter, setFilter }: Props) {
     </ul>
   )
 }
+
+TaskFilter.propTypes = {
+  filter: PropTypes.string.isRequired,
+  setFilter: PropTypes.func.isRequired,
+};
 
 export default TaskFilter

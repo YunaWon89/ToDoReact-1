@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from "date-fns"
 import { useState } from "react"
+import PropTypes from "prop-types";
 
 type TaskType = {
   id: number
@@ -59,5 +60,21 @@ function Task({ task, toggleTask, deleteTask, toggleEditTask, updateTask }: Prop
     </li>
   )
 }
+
+
+Task.propTypes = {
+  task: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired,
+    created: PropTypes.instanceOf(Date).isRequired,
+    isEditing: PropTypes.bool.isRequired,
+  }).isRequired,
+
+  toggleTask: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
+  toggleEditTask: PropTypes.func.isRequired,
+  updateTask: PropTypes.func.isRequired,
+};
 
 export default Task
